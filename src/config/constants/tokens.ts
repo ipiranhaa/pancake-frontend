@@ -33,6 +33,8 @@ export const BUSD: { [chainId: number]: Token } = {
   ),
 }
 
+export const KET = new Token(ChainId.TESTNET, '0x56Cdb44E29C54C9649D81aC6defD6Fd2A172EA4E', 18, 'KET', 'Ketchup')
+
 export const WBNB = new Token(ChainId.MAINNET, '0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c', 18, 'WBNB', 'Wrapped BNB')
 export const DAI = new Token(ChainId.MAINNET, '0x1AF3F329e8BE154074D8769D1FFa4eE058B1DBc3', 18, 'DAI', 'Dai Stablecoin')
 export const USDT = new Token(ChainId.MAINNET, '0x55d398326f99059fF775485246999027B3197955', 18, 'USDT', 'Tether USD')

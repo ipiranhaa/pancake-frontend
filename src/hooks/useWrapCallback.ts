@@ -34,11 +34,14 @@ export default function useWrapCallback(
   const addTransaction = useTransactionAdder()
 
   return useMemo(() => {
+    // console.log({ wethContract, chainId, inputCurrency, outputCurrency })
     if (!wethContract || !chainId || !inputCurrency || !outputCurrency) return NOT_APPLICABLE
 
     const sufficientBalance = inputAmount && balance && !balance.lessThan(inputAmount)
 
+    console.log({ inputCurrency, ETHER, WETH: WETH[chainId] })
     if (inputCurrency === ETHER && currencyEquals(WETH[chainId], outputCurrency)) {
+      console.log('To ETHER')
       return {
         wrapType: WrapType.WRAP,
         execute:
@@ -48,6 +51,7 @@ export default function useWrapCallback(
                   const txReceipt = await callWithGasPrice(wethContract, 'deposit', undefined, {
                     value: `0x${inputAmount.raw.toString(16)}`,
                   })
+                  console.log({ txReceipt })
                   addTransaction(txReceipt, { summary: `Wrap ${inputAmount.toSignificant(6)} BNB to WBNB` })
                 } catch (error) {
                   console.error('Could not deposit', error)
@@ -58,6 +62,7 @@ export default function useWrapCallback(
       }
     }
     if (currencyEquals(WETH[chainId], inputCurrency) && outputCurrency === ETHER) {
+      console.log('To OTHER')
       return {
         wrapType: WrapType.UNWRAP,
         execute:
@@ -76,6 +81,8 @@ export default function useWrapCallback(
         inputError: sufficientBalance ? undefined : 'Insufficient WBNB balance',
       }
     }
+    console.log('NOT_APPLICABLE')
+
     return NOT_APPLICABLE
   }, [wethContract, chainId, inputCurrency, outputCurrency, inputAmount, balance, addTransaction, callWithGasPrice])
 }
